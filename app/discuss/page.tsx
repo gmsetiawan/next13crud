@@ -1,26 +1,20 @@
 import PostList from "@/components/PostList";
 import { prisma } from "@/lib/db";
-import Link from "next/link";
+import React from "react";
 
-export default async function Home() {
+export default async function Discuss() {
   const posts = await prisma.post.findMany({
     orderBy: {
       createdAt: "desc",
     },
   });
   return (
-    <main className="h-screen">
+    <div className="h-screen">
       <div className="relative max-w-2xl mx-auto py-10">
         <div className="flex flex-col gap-4">
-          <Link
-            href="/post/create"
-            className="w-32 p-2 rounded bg-cyan-600 hover:bg-cyan-400 text-center text-sm text-white"
-          >
-            Create Post
-          </Link>
           <PostList posts={posts} />
         </div>
       </div>
-    </main>
+    </div>
   );
 }

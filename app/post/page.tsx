@@ -1,15 +1,17 @@
+import FormCreatePost from "@/components/FormCreatePost";
 import PostList from "@/components/PostList";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
+import React from "react";
 
-export default async function Home() {
+const PostPage = async () => {
   const posts = await prisma.post.findMany({
     orderBy: {
       createdAt: "desc",
     },
   });
   return (
-    <main className="h-screen">
+    <div className="h-screen">
       <div className="relative max-w-2xl mx-auto py-10">
         <div className="flex flex-col gap-4">
           <Link
@@ -21,6 +23,8 @@ export default async function Home() {
           <PostList posts={posts} />
         </div>
       </div>
-    </main>
+    </div>
   );
-}
+};
+
+export default PostPage;
