@@ -72,18 +72,25 @@ export default async function ProductPage(product: Product) {
             <div key={product.id} className="p-2 border rounded text-sm">
               <p>{product.product}</p>
               <p>{product.price}</p>
-              <form>
-                <button
-                  formAction={async () => {
-                    "use server";
-                    await deleteProduct(product);
-                  }}
-                  className="text-xs text-red-400 hover:cursor-pointer hover:text-red-300"
+              <div className="flex justify-between items-center">
+                <form>
+                  <button
+                    formAction={async () => {
+                      "use server";
+                      await deleteProduct(product);
+                    }}
+                    className="text-xs text-red-400 hover:cursor-pointer hover:text-red-300"
+                  >
+                    Delete
+                  </button>
+                </form>
+                <Link
+                  href={`products/${product.id}`}
+                  className="text-xs text-green-400 hover:cursor-pointer hover:text-green-300"
                 >
-                  Delete
-                </button>
-              </form>
-              <Link href={`products/${product.id}`}>Edit</Link>
+                  Edit
+                </Link>
+              </div>
             </div>
           ))}
         </div>

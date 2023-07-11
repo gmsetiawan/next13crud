@@ -1,4 +1,5 @@
 import { updateProduct } from "@/actions/serverAction";
+import { Product } from "@/typings";
 import React from "react";
 
 type Props = {
