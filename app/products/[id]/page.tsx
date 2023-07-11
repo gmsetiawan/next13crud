@@ -1,30 +1,27 @@
-import { addNewProduct, deleteProduct } from "@/actions/serverAction";
-import AddProductButton from "@/components/AddProductButton";
-import { Product } from "@/typings";
-import Link from "next/link";
+import { updateProduct } from "@/actions/serverAction";
 import React from "react";
 
-export default async function ProductPage(product: Product) {
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function ProductEditPage({ params: { id } }: Props) {
   const res = await fetch(
-    "https://64ad3d34b470006a5ec596e5.mockapi.io/products",
-    {
-      cache: "no-cache",
-      next: {
-        tags: ["products"],
-      },
-    }
+    `https://64ad3d34b470006a5ec596e5.mockapi.io/products/${id}`
   );
 
-  const products: Product[] = await res.json();
+  const product = await res.json();
 
   return (
     <div className="relative max-w-2xl mx-auto py-10">
       <div className="flex flex-col gap-2 p-2 lg:p-0">
-        <h1 className="text-center text-xl font-semibold">Product Page</h1>
+        <h1 className="text-center text-xl font-semibold">
+          Edit Product <span className="text-red-400">{product.product}</span>
+        </h1>
 
-        <AddProductButton />
-
-        <form action={addNewProduct}>
+        <form>
           <div className="flex flex-col gap-2">
             <div>
               <label
@@ -58,35 +55,16 @@ export default async function ProductPage(product: Product) {
             </div>
 
             <button
-              type="submit"
+              formAction={async () => {
+                "use server";
+                await updateProduct(product);
+              }}
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              Save
+              Update
             </button>
           </div>
         </form>
-
-        <h1 className="text-center text-xl font-semibold">Product List</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          {products.map((product) => (
-            <div key={product.id} className="p-2 border rounded text-sm">
-              <p>{product.product}</p>
-              <p>{product.price}</p>
-              <form>
-                <button
-                  formAction={async () => {
-                    "use server";
-                    await deleteProduct(product);
-                  }}
-                  className="text-xs text-red-400 hover:cursor-pointer hover:text-red-300"
-                >
-                  Delete
-                </button>
-              </form>
-              <Link href={`products/${product.id}`}>Edit</Link>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
